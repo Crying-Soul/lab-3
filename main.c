@@ -6,15 +6,21 @@
 
 
 int main(void){
-	char* all_text = malloc(100*sizeof(char));
-	int char_counter = 1;
-	while(getchar() != '!'){
-		//all_text = malloc(char_counter*sizeof(char));
-		scanf("%c", &all_text[char_counter-1]);
-	//	printf("%d", char_counter);
-		char_counter++;
+	char ch;
+	int capacity = 1;
+	int size = 0;
+	char* text = malloc(capacity*sizeof(char));
+	
+	while((ch = getchar()) != '\n'){
+		if (size >= capacity){
+		       	capacity *= 2;
+			text = (char *)realloc(text, capacity*sizeof(char));
+			}
+		text[size++] = ch; 
+			
+			
 	}	
-	printf("%s\n", all_text);
-
+	printf("%s\n", text);
+	free(text);
 	return 0;
 }
