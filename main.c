@@ -1,10 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include <ctype.h>
 
 char** split_text(char* text, int* num_sentences, const char* spliters);
-void removeLeadingSpaces(char* str);
+void remove_lead_spaces(char* str);
+int remove_sentences_with_uppercases(char** splitted_text, int current_num_sentence);
+
 int main(void){
 	char ch;
 	int capacity = 1, size = 0;
@@ -21,15 +23,15 @@ int main(void){
 
 	}
 
-	//char **splitted_text = malloc(sizeof(char*));
 	int num_sentences;
 	char** splitted_text = split_text(text, &num_sentences, spliters);
+	int result_num_sentences = remove_sentences_with_uppercases(splitted_text, num_sentences);
 
-	// Печать результатов
-	for (int i = 0; i < num_sentences; i++) {
+	for (int i = 0; i < result_num_sentences; i++) {
 		printf("Предложение %d: %s\n", i + 1, splitted_text[i]);
 		free(splitted_text[i]);
 	}
+
 
 	free(splitted_text);
 	free(text);
@@ -53,7 +55,7 @@ char** split_text(char* text, int* num_sentences, const char* spliters) {
 				splitted_text[count_sentences - 1][chr_counter++] = text[i - j];
 			}
 			splitted_text[count_sentences - 1][chr_counter] = '\0';  
-			removeLeadingSpaces(splitted_text[count_sentences - 1]);
+			remove_lead_spaces(splitted_text[count_sentences - 1]);
 			end_index = 0;
 			continue;
 		}
@@ -63,7 +65,7 @@ char** split_text(char* text, int* num_sentences, const char* spliters) {
 	return splitted_text;
 
 }
-void removeLeadingSpaces(char* str) {
+void remove_lead_spaces(char* str) {
 	char* start = str;
 
 	while (*start && *start == ' ') {
@@ -71,4 +73,24 @@ void removeLeadingSpaces(char* str) {
 	}
 
 	memmove(str, start, strlen(start) + 1);
+
+}
+
+int remove_sentences_with_uppercases(char** splitted_text, int current_num_sentence){
+	int sentence_counter = 0;
+	for (int i = 0; i < current_num_sentence; ++i) {
+		int uppercaseCount = 0;
+		char* sentence = splitted_text[i];
+
+		for (int j = 0; j < strlen(sentence); ++j) {
+			if (isupper(sentence[j])) {
+				uppercaseCount++;
+			}
+		}
+		if (uppercaseCount <= 1) {
+			splitted_text[sentence_counter] = strdup(sentence);
+			sentence_counter++;
+		}
+	}    
+	return sentence_counter;
 }
