@@ -6,24 +6,13 @@
 char** split_text(char* text, int* num_sentences, const char* spliters);
 void remove_lead_spaces(char* str);
 int remove_sentences_with_uppercases(char** splitted_text, int current_num_sentence);
+char* get_text_input(const char* end_symbol);
 
 int main(void){
-	char ch;
-	int capacity = 1, size = 0;
+	int num_sentences;
 	const char* spliters = ".;?";
 	const char* end_symbol = "\n";
-	char* text = malloc(capacity*sizeof(char));
-
-	while((ch = getchar()) != *end_symbol){
-		if (size >= capacity){
-			capacity *= 2;
-			text = (char *)realloc(text, capacity*sizeof(char));
-		}
-		text[size++] = ch;	
-
-	}
-
-	int num_sentences;
+	char* text = get_text_input(end_symbol);
 	char** splitted_text = split_text(text, &num_sentences, spliters);
 	int result_num_sentences = remove_sentences_with_uppercases(splitted_text, num_sentences);
 
@@ -38,6 +27,21 @@ int main(void){
 	return 0;
 }
 
+char* get_text_input(const char* end_symbol){
+	int capacity = 1, size = 0;
+	char ch;
+	char* text = malloc(capacity*sizeof(char));
+	while((ch = getchar()) != *end_symbol){
+		if (size >= capacity){
+			capacity *= 2;
+			text = (char *)realloc(text, capacity*sizeof(char));
+		}
+		text[size++] = ch;
+
+	}
+	return text;
+
+}
 char** split_text(char* text, int* num_sentences, const char* spliters) {
 	int count_sentences = 0;
 	int end_index = 0;
