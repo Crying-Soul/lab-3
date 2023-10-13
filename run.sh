@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-gcc -o lab-3.out main.c
+gcc -Wall -Wextra -pedantic -o lab-3.out main.c
 
 if [ $? -eq 0 ]; then
     while IFS= read -r line; do
