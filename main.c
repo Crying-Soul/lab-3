@@ -11,7 +11,7 @@ char* get_text_input(const char* end_symbol);
 int main(void) {
 	int num_sentences = 0;
 	const char* spliters = ".;?";
-	const char* end_symbol = "\n";
+	const char* end_symbol = "!";
 	char* text = get_text_input(end_symbol);
 	char** splitted_text = split_text(text, &num_sentences, spliters);
 
@@ -33,13 +33,15 @@ char* get_text_input(const char* end_symbol) {
 	char* text = malloc(capacity * sizeof(char));
 
 	while ((ch = getchar()) != *end_symbol) {
-		if (size >= capacity) {
-			capacity *= 2;
-			text = realloc(text, capacity * sizeof(char));
-		}
-		text[size++] = ch;
+		if (ch != '\n' || ch != EOF){	
+			if (size >= capacity) {
+				capacity *= 2;
+				text = realloc(text, capacity * sizeof(char));
+			}
+			text[size++] = ch;}
 	}
-
+	text = realloc(text, (capacity+1)*sizeof(char));
+	text[size] = *end_symbol;
 	return text;
 }
 
@@ -48,7 +50,7 @@ char** split_text(char* text, int* num_sentences, const char* spliters) {
 	int end_index = 0;
 	char** splitted_text = malloc(sizeof(char*));
 
-	for (int i = 0; i < strlen(text); i++) {
+	for (int i = 0; i <= (int)strlen(text); i++) {
 		if (strchr(spliters, text[i]) != NULL) {
 			count_sentences++;
 
@@ -88,7 +90,7 @@ int remove_sentences_with_uppercases(char** splitted_text, int current_num_sente
 		int uppercaseCount = 0;
 		char* sentence = splitted_text[i];
 
-		for (int j = 0; j < strlen(sentence); ++j) {
+		for (int j = 0; j < (int)strlen(sentence); ++j) {
 			if (isupper(sentence[j])) {
 				uppercaseCount++;
 			}
