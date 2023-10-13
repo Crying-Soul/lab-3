@@ -21,7 +21,6 @@ int main(void) {
 		printf("Предложение %d: %s\n", i + 1, splitted_text[i]);
 		free(splitted_text[i]);
 	}
-
 	free(splitted_text);
 	free(text);
 	return 0;
@@ -33,7 +32,7 @@ char* get_text_input(const char* end_symbol) {
 	char* text = malloc(capacity * sizeof(char));
 
 	while ((ch = getchar()) != *end_symbol) {
-		if (ch != '\n' || ch != EOF){	
+		if (ch != '\n'){	
 			if (size >= capacity) {
 				capacity *= 2;
 				text = realloc(text, capacity * sizeof(char));
