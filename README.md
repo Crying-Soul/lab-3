@@ -1,1 +1,1 @@
-##Prog Lab-3: pointers
+# Prog Lab-3: pointers
