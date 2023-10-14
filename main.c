@@ -33,11 +33,13 @@ char* get_text_input(const char* end_symbol) {
 	char ch;
 	char* text = malloc(capacity * sizeof(char));
 	while ((ch = getchar()) != *end_symbol) {
+		if (ch != '\n'){
 		if (size >= capacity) {
 			capacity *= 2;
 			text = realloc(text, capacity * sizeof(char));
 		}
 		text[size++] = ch;
+		}
 	}
 	text = realloc(text, (capacity+1)*sizeof(char));
 	text[size] = *end_symbol;
