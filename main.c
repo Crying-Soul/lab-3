@@ -3,6 +3,7 @@
 #include <string.h>
 #include <ctype.h>
 #define MEMORY_CHUNK 20;
+
 char** split_text(char* text, int* num_sentences, const char* spliters);
 void remove_lead_spaces(char* str);
 int remove_sentences_with_uppercases(char** splitted_text, int current_num_sentence);
@@ -15,7 +16,6 @@ int main(void) {
 	char* text = get_text_input(end_symbol);
 	char** splitted_text = split_text(text, &num_sentences, spliters);
 
-	
 	int result_num_sentences = remove_sentences_with_uppercases(splitted_text, num_sentences);
 
 	for (int i = 0; i < result_num_sentences; i++) {
@@ -103,10 +103,7 @@ int remove_sentences_with_uppercases(char** splitted_text, int current_num_sente
 			sentence_counter++;
 		}
 	}
-	for (int i = current_num_sentence; i > sentence_counter; --i)
-		free(splitted_text[i]);
 
 
 	return sentence_counter;
 }
-
