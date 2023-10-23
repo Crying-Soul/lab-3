@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-
+#define MEMORY_CHUNK 20;
 char** split_text(char* text, int* num_sentences, const char* spliters);
 void remove_lead_spaces(char* str);
 int remove_sentences_with_uppercases(char** splitted_text, int current_num_sentence);
@@ -15,7 +15,7 @@ int main(void) {
 	char* text = get_text_input(end_symbol);
 	char** splitted_text = split_text(text, &num_sentences, spliters);
 
-
+	
 	int result_num_sentences = remove_sentences_with_uppercases(splitted_text, num_sentences);
 
 	for (int i = 0; i < result_num_sentences; i++) {
@@ -28,23 +28,26 @@ int main(void) {
 	return 0;
 }
 
+
 char* get_text_input(const char* end_symbol) {
-	int capacity = 1, size = 0;
-	char ch;
-	char* text = malloc(capacity * sizeof(char));
-	while ((ch = getchar()) != *end_symbol) {
-		if (ch != '\n'){
-		if (size >= capacity) {
-			capacity *= 2;
-			text = realloc(text, capacity * sizeof(char));
-		}
-		text[size++] = ch;
-		}
-	}
-	text = realloc(text, (capacity+1)*sizeof(char));
-	text[size] = *end_symbol;
-	return text;
+    unsigned int size = 0, capacity = MEMORY_CHUNK;
+    char ch;
+    char* text = malloc(sizeof(char*));
+    while ((ch = getchar()) != *end_symbol) {
+        if (ch != '\n') {
+			if (size >= capacity - 1){
+				capacity += MEMORY_CHUNK;
+				text = realloc(text, capacity * sizeof(char));
+			}
+            text[size++] = ch;
+        }
+    }
+	text = realloc(text, (size + 2) * sizeof(char));
+	text[size++] = *end_symbol;
+	text[size] = '\0'; 
+    return text;
 }
+
 
 char** split_text(char* text, int* num_sentences, const char* spliters) {
 	int count_sentences = 0;
